@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Formulario de Préstamo de Libro</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <section class="header">
+        <div class="header-container">
+            <h1>Prestamo</h1>
+            <img src="iconos/icono.webp" alt="Icono de Préstamo" class="logo">
+        </div>
+    </section>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="historia.html">Historia</a>
+        <a href="Prestamo.html">Prestamo de libros</a>
+        <a href="contactanos.html">Contacto</a>
+        <a href="Prepietarios.html">Propietarios</a>
+        
+        
+  
+    </nav>
+    
+      <section class="contacto">
+        
+            <h2>Préstamo de Libro</h2>
+            <label for="nombre">Nombres:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="apellido">Apellidos:</label>
+            <input type="text" id="apellido" name="apellido" required>
+
+            <label for="telefono">Número de Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required>
+
+            <label for="fechaEntrega">Fecha de Salida:</label>
+            <input type="date" id="fechaEntrega" name="fechaEntrega" required>
+
+            <label for="fechaDevolucion">Fecha de Devolución:</label>
+            <input type="date" id="fechaDevolucion" name="fechaDevolucion" required>
+            
+            <label for="nombreLibro">Nombre del Libro:</label>
+            <input type="text" id="nombreLibro" name="nombreLibro" required>
+            
+            <button type="submit">Guardar</button>
+        
+
+      </section>
+        
+        <div class="prestamos-list">
+            <h2>Listado de Préstamos</h2>
+            <ul id="prestamosList"></ul>
+        </div>
+    
+    
+    <script>
+        document.getElementById('loanForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const telefono = document.getElementById('telefono').value;
+            const fechaEntrega = document.getElementById('fechaEntrega').value;
+            const fechaDevolucion = document.getElementById('fechaDevolucion').value;
+            const nombreLibro = document.getElementById('nombreLibro').value;
+
+            const prestamo = {
+                nombre: nombre,
+                apellido: apellido,
+                telefono: telefono,
+                fechaEntrega: fechaEntrega,
+                fechaDevolucion: fechaDevolucion,
+                nombreLibro: nombreLibro
+            };
+
+            let prestamos = JSON.parse(localStorage.getItem('prestamos')) || [];
+            prestamos.push(prestamo);
+            localStorage.setItem('prestamos', JSON.stringify(prestamos));
+
+            alert('Préstamo guardado!');
+            this.reset();
+            displayPrestamos();
+        });
+
+        function displayPrestamos() {
+            const prestamos = JSON.parse(localStorage.getItem('prestamos')) || [];
+            const prestamosList = document.getElementById('prestamosList');
+
+            prestamosList.innerHTML = prestamos.map((prestamo, index) => `
+                <li>
+                    <strong>Nombre:</strong> ${prestamo.nombre} ${prestamo.apellido}<br>
+                    <strong>Teléfono:</strong> ${prestamo.telefono}<br>
+                    <strong>Libro:</strong> ${prestamo.nombreLibro}<br>
+                    <strong>Fecha de Salida:</strong> ${prestamo.fechaEntrega}<br>
+                    <strong>Fecha de Devolución:</strong> ${prestamo.fechaDevolucion}<br>
+                    <button onclick="eliminarPrestamo(${index})">Eliminar</button>
+                </li>
+            `).join('');
+        }
+
+        function eliminarPrestamo(index) {
+            let prestamos = JSON.parse(localStorage.getItem('prestamos')) || [];
+            prestamos.splice(index, 1);
+            localStorage.setItem('prestamos', JSON.stringify(prestamos));
+            displayPrestamos();
+        }
+
+        displayPrestamos();
+    </script>
+</body>
+</html>
+            
